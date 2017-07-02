@@ -1,7 +1,5 @@
 defmodule PhoenixCommerce.Acceptance.ProductsTest do
-  use ExUnit.Case
-  use Hound.Helpers
-  hound_session()
+  use PhoenixCommerce.AcceptanceCase
 
   test "/products has a list of products" do
     navigate_to "/products"

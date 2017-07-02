@@ -24,12 +24,12 @@ defmodule PhoenixCommerce.Mixfile do
   end
 
   def applications(:test) do
-    [:hound | applications(:dev)]
+    [:hound, :gettext | applications(:dev)]
   end
 
   def applications(_) do
-    [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-     :phoenix_ecto, :postgrex]
+    [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :phoenix_ecto,
+     :postgrex]
   end
 
   # Specifies which paths to compile per environment.
