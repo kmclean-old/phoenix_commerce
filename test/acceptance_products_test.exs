@@ -4,15 +4,19 @@ defmodule PhoenixCommerce.Acceptance.ProductsTest do
   alias PhoenixCommerce.Product
   alias PhoenixCommerce.Repo
 
+  @upload %Plug.Upload{path: Path.relative_to_cwd("test/files/fishing.jpg"),
+    filename: "fishing.jpg", content_type: "image/jpg"}
+
   setup do
     Repo.delete_all(Product)
 
     {:ok, product} =
-      %Product{
+      Product.changeset(%Product{}, %{
         name: "Some product",
         description: "Product description",
-        price: Decimal.new("25.20")
-      } |> Repo.insert
+        price: Decimal.new("25.20"),
+        image: @upload
+      }) |> Repo.insert
 
     {:ok, product: product}
   end
@@ -22,7 +26,7 @@ defmodule PhoenixCommerce.Acceptance.ProductsTest do
     assert find_element(:css, "ul.products")
   end
 
-  test "/products - details include name, description, and price",
+  test "/products - details include name, description, image, and price",
     %{product: product} do
 
     navigate_to "/products"
@@ -30,10 +34,12 @@ defmodule PhoenixCommerce.Acceptance.ProductsTest do
     name = find_within_element(product_li, :css, "h3")
     price = find_within_element(product_li, :css, "h4")
     description = find_within_element(product_li, :css, "p")
+    image = find_within_element(product_li, :css, "img")
 
     assert visible_text(name) == product.name
     assert visible_text(price) == "$#{product.price}"
     assert visible_text(description) == product.description
+    assert attribute_value(image, "src") =~ ~r/amazon/
   end
 
   test "/products - clicking a product lets you view its details",
