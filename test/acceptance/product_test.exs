@@ -1,4 +1,4 @@
-defmodule PhoenixCommerce.Acceptance.ProductsTest do
+defmodule PhoenixCommerce.Acceptance.ProductTest do
   use PhoenixCommerce.AcceptanceCase
 
   alias PhoenixCommerce.Product
