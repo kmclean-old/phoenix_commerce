@@ -1,8 +1,7 @@
 defmodule PhoenixCommerce.Acceptance.ProductTest do
   use PhoenixCommerce.AcceptanceCase
 
-  alias PhoenixCommerce.Product
-  alias PhoenixCommerce.Repo
+  alias PhoenixCommerce.{Product, Repo}
 
   @upload %Plug.Upload{path: Path.relative_to_cwd("test/files/fishing.jpg"),
     filename: "fishing.jpg", content_type: "image/jpg"}

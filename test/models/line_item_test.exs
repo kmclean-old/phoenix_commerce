@@ -3,7 +3,7 @@ defmodule PhoenixCommerce.LineItemTest do
 
   alias PhoenixCommerce.LineItem
 
-  @valid_attrs %{quantity: 42, product_id: 1}
+  @valid_attrs %{quantity: 42, product_id: 1, cart_id: 1}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do
