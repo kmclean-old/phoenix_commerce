@@ -18,6 +18,11 @@
               to: line_item_path(@conn, :delete, line_item),
               method: :delete,
               class: "remove-from-cart" %>
+            <%= form_for PhoenixCommerce.LineItem.changeset(line_item),
+              line_item_path(@conn, :update, line_item), fn f -> %>
+              <%= number_input f, :quantity, class: "quantity" %>
+              <%= submit("Update") %>
+            <% end %>
           </td>
         </tr>
       <% end %>
