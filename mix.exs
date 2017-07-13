@@ -1,8 +1,7 @@
 defmodule PhoenixCommerce.Mixfile do
   use Mix.Project
 
-  def project do
-    [app: :phoenix_commerce,
+  def project do [app: :phoenix_commerce,
      version: "0.0.1",
      elixir: "~> 1.2",
      elixirc_paths: elixirc_paths(Mix.env),
@@ -29,7 +28,7 @@ defmodule PhoenixCommerce.Mixfile do
 
   def applications(_) do
     [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :phoenix_ecto,
-     :postgrex, :httpoison]
+     :postgrex, :httpoison, :stripity_stripe]
   end
 
   # Specifies which paths to compile per environment.
@@ -54,7 +53,8 @@ defmodule PhoenixCommerce.Mixfile do
       {:arc_ecto, "~> 0.7.0"},
       {:ex_aws, "~> 1.1"},
       {:httpoison, "~> 0.12"},
-      {:sweet_xml, "~> 0.6"}
+      {:sweet_xml, "~> 0.6"},
+      {:stripity_stripe, "~> 1.6.0"}
     ]
   end
 
