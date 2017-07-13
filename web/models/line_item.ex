@@ -5,6 +5,7 @@ defmodule PhoenixCommerce.LineItem do
     field :quantity, :integer
     belongs_to :product, PhoenixCommerce.Product
     belongs_to :cart, PhoenixCommerce.Cart
+    belongs_to :order, PhoenixCommerce.Order
 
     timestamps()
   end
@@ -15,6 +16,6 @@ defmodule PhoenixCommerce.LineItem do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:quantity, :product_id, :cart_id])
-    |> validate_required([:quantity, :product_id, :cart_id])
+    |> validate_required([:quantity, :product_id])
   end
 end
