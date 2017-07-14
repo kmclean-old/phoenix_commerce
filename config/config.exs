@@ -7,7 +7,8 @@ use Mix.Config
 
 # General application configuration
 config :phoenix_commerce,
-  ecto_repos: [PhoenixCommerce.Repo]
+  ecto_repos: [PhoenixCommerce.Repo],
+  stripe_publishable_key: System.get_env("STRIPE_PUBLISHABLE_KEY")
 
 # Configures the endpoint
 config :phoenix_commerce, PhoenixCommerce.Endpoint,

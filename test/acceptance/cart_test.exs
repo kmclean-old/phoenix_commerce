@@ -1,7 +1,8 @@
 defmodule PhoenixCommerce.Acceptance.CartTest do
   use PhoenixCommerce.AcceptanceCase
 
-  alias PhoenixCommerce.{Product, LineItem, Repo}
+  alias PhoenixCommerce.{Product, LineItem, Repo, Order, Cart}
+  import Ecto.Query, only: [from: 2]
 
   @upload %Plug.Upload{path: Path.relative_to_cwd("test/files/fishing.jpg"),
     filename: "fishing.jpg", content_type: "image/jpg"}
@@ -9,6 +10,8 @@ defmodule PhoenixCommerce.Acceptance.CartTest do
   setup do
     Repo.delete_all(Product)
     Repo.delete_all(LineItem)
+    Repo.delete_all(Order)
+    Repo.delete_all(Cart)
 
     {:ok, product} =
       Product.changeset(%Product{}, %{
@@ -60,6 +63,16 @@ defmodule PhoenixCommerce.Acceptance.CartTest do
     assert quantity(product) == 5
   end
 
+  test "checking out a cart", %{product: product} do
+    navigate_to "/products/#{product.id}"
+    click(add_to_cart_button())
+    navigate_to "/cart"
+    checkout()
+    order = get_last_order()
+    assert order != nil
+    assert hd(order.line_items).quantity == 1
+  end
+
   def heading, do: find_element(:css, "h2")
   def cart, do: find_element(:css, ".cart")
   def cart_table, do: find_within_element(cart(), :css, "table")
@@ -99,5 +112,41 @@ defmodule PhoenixCommerce.Acceptance.CartTest do
       |> Integer.parse
 
     quantity
+  end
+
+  def checkout do
+    click(checkout_button())
+    :timer.sleep(1_000)
+    focus_frame("stripe_checkout_app")
+    fill_field_by_placeholder("Email", "test@example.com")
+    find_element(:css, ".Header-navBack") |> click()
+    fill_field_by_placeholder("Card number", "4242424242424242")
+    fill_field_by_placeholder("MM / YY", "1020")
+    fill_field_by_placeholder("CVC", "123")
+    fill_field_by_placeholder("ZIP Code", "12345")
+    submit_checkout()
+    :timer.sleep(6_000)
+  end
+
+  def fill_field_by_placeholder(placeholder, val) do
+    find_element(:xpath, "//input[@placeholder='#{placeholder}']")
+      |> fill_field(val)
+  end
+
+  def checkout_button do
+    find_element(:css, "button.stripe-button-el")
+  end
+
+  def submit_checkout do
+    find_element(:css, "button") |> click()
+  end
+
+  def get_last_order do
+    query =
+      from o in Order,
+      order_by: [desc: o.inserted_at],
+      preload: [:line_items]
+
+    Repo.one(query)
   end
 end
