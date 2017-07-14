@@ -1,5 +1,14 @@
 # PhoenixCommerce
 
+To make it work you'll need S3 and Stripe API keys set up:
+
+```bash
+AWS_ACCESS_KEY_ID='...'
+AWS_SECRET_ACCESS_KEY='...'
+STRIPE_SECRET_KEY='...'
+STRIPE_PUBLISHABLE_KEY='...'
+```
+
 To start your Phoenix app:
 
   * Install dependencies with `mix deps.get`
